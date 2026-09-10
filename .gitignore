@@ -45,3 +45,7 @@ venv.bak/
 .vscode/
 .idea/
 *.swp
+
+# CLI Binaries
+gh_bin/
+
