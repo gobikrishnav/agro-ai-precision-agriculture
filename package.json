@@ -1,0 +1,22 @@
+{
+  "name": "smart-crop-fertilizer-recommendation-system",
+  "version": "2.0.0",
+  "description": "Smart Crop and Fertilizer Recommendation System with Next.js",
+  "private": true,
+  "scripts": {
+    "dev": "npm --prefix agro-ai-web run dev",
+    "build": "npm --prefix agro-ai-web run build",
+    "start": "npm --prefix agro-ai-web run start",
+    "lint": "npm --prefix agro-ai-web run lint"
+  },
+  "keywords": [
+    "nextjs",
+    "agriculture",
+    "crop-recommendation",
+    "fertilizer-prescription",
+    "precision-farming",
+    "fao-56"
+  ],
+  "author": "gobikrishnav",
+  "license": "MIT"
+}

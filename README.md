@@ -1,130 +1,107 @@
-# 🌱 AgroAI: Smart Crop & Fertilizer Recommendation System
+# 🌱 AgroAI: Smart Crop & Fertilizer Precision Decision Platform
 
-[![Python](https://img.shields.io/badge/Python-3.9%20%7C%203.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-brightgreen.svg)](https://www.python.org/)
-[![Streamlit](https://img.shields.io/badge/Streamlit-1.30+-FF4B4B.svg)](https://streamlit.io/)
-[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-ML%20Ensemble-orange.svg)](https://scikit-learn.org/)
+[![Next.js](https://img.shields.io/badge/Next.js-16.3+-black.svg)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)](https://www.typescriptlang.org/)
+[![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-v4-38bdf8.svg)](https://tailwindcss.com/)
+[![ICAR & FAO](https://img.shields.io/badge/Standards-ICAR%20%7C%20FAO--56-brightgreen.svg)](https://www.fao.org/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-An Enterprise-Grade, Machine Learning-powered Precision Agriculture Decision Support Platform. **AgroAI** combines multi-model ensemble classifiers, soil stoichiometric chemistry calculations, dynamic evapotranspiration ($ET_c$) water budgeting, and intuitive agricultural analytics to empower farmers, agronomists, and researchers.
+An Enterprise-Grade, Machine Learning-powered Precision Agriculture Decision Support Platform built with **Next.js**, **TypeScript**, and **Tailwind CSS**. 
+
+**AgroAI** combines multi-vector machine learning algorithms, stoichiometric soil chemistry calculations, dynamic FAO-56 evapotranspiration ($ET_c$) water budgeting, and plain-English agricultural explanations to empower farmers, growers, and agronomists with actionable field decisions.
 
 ---
 
-## 🏛️ System Architecture
+## 🚀 Key Highlights & New Modern Architecture
 
-![System Architecture](assets/system_architecture_diagram.jpg)
+1. **🎨 High-Converting, Explainable Front Page**:
+   - Clear, plain-English breakdown of essential macronutrients (**Nitrogen, Phosphorus, Potassium**) and what symptoms indicate deficiency.
+   - Interactive **Soil pH Availability Matrix** illustrating how nutrient absorption locks up below pH 6.0 (acidic) and above pH 7.8 (alkaline).
+   - **Soil Texture Dynamics** explaining leaching rates in Sandy Loam vs. Phosphorus fixation in Black Cotton Soils.
+   - Prominent **"Get Started"** call-to-action button leading directly to the Interactive Decision Suite.
 
-The platform is designed in 5 modular architectural layers:
-1. **User & Soil Input Layer**: Gathers laboratory soil chemistry metrics ($N, P, K, \text{pH}$, Soil Texture) and environmental weather forecasts (Temperature, Humidity, Rainfall).
-2. **Data Processing & Validation Pipeline**: Ingests and validates the 2,200-row `Crop_Recommendation.csv` dataset with stratified splitting and feature normalization.
-3. **Multi-Model Machine Learning Core**: Simultaneously trains and evaluates 6 ML algorithms, selecting the highest-performing model for real-time inference.
-4. **Agronomic Decision Support Core**: Computes dynamic fertilizer deficits (Urea, DAP, MOP, SSP, Vermicompost, Lime/Gypsum) and precision daily irrigation runtimes.
-5. **UI & Analytics Layer**: Modern Streamlit interface with a pure light white-and-green bio-theme and 4 dedicated chart modules (*Bar Charts, Line Graphs, Pie Charts, Pictographs*).
+2. **🚫 Streamlined for High Utility (Confusing Analytics Removed)**:
+   - Cluttered charts and abstract graphs (scatter plots, pie charts, pictographs) have been replaced with **pure, actionable decision tools**.
+   - Direct answers: What crop to grow, how many commercial 45kg/50kg fertilizer bags to buy, and how many hours to run the water pump.
 
----
-
-## ✨ Key Features
-
-- **🌾 Multi-Model Crop Recommendation Engine**:
-  - Predicts optimal crops across 22 varieties based on soil nutrients and climatic parameters.
-  - Generates confidence probability distributions for alternative crop options.
-- **🧪 Dynamic AI Fertilizer Prescription Engine**:
-  - Calculates exact nutrient deficits ($N, P, K$) considering soil texture (leaching vs. fixation) and target yield.
-  - Automatically adjusts for soil acidity/alkalinity by prescribing Agricultural Lime or Gypsum.
-  - Provides exact kilogram doses, bag counts, and application timing schedules.
-- **💧 Dynamic Smart Irrigation Planner**:
-  - Implements FAO-56 Penman-Monteith Evapotranspiration ($ET_c$) models based on crop growth stages, VPD, and temperature.
-  - Calculates daily water volumes, pump runtimes (hours/minutes), and accounts for effective rainfall credits.
-- **📈 Dedicated 4-Chart Analytics Module**:
-  - **Bar Charts**: Multi-nutrient comparisons across crop families.
-  - **Line Graphs**: 120-day water consumption and nutrient uptake curves.
-  - **Pie Charts**: Soil nutrient balance proportions and crop family shares.
-  - **Pictographs**: Intuitive icon-based visual comparisons for rainfall and nitrogen demand.
-- **💰 Instant Fertilizer Cost & Budget Calculator**:
-  - Real-time bag requirement and expenditure estimation with custom acreage and subsidy controls.
-- **🛡️ Plant Doctor & Botanical Almanac**:
-  - Integrated pest management (IPM) guidelines and organic farm-made bio-pesticide formulations.
+3. **🌾 5 Core Action-First Agricultural Modules**:
+   - **1. Crop Recommendation Engine**: Evaluates soil N, P, K, pH, temperature, humidity, and rainfall against 2,200 verified records with top crop confidence and runner-up alternatives.
+   - **2. Stoichiometric Fertilizer Prescription**: Calculates exact nutrient deficits and outputs commercial bag counts for Urea, DAP, MOP, SSP, and Vermicompost with split application schedules.
+   - **3. Dynamic Smart Irrigation (FAO-56)**: Daily water volume budgeting in Liters/Acre and pump runtime in hours and minutes.
+   - **4. Plant Doctor & Crop Almanac**: Integrated pest management (IPM) guidelines and organic farm-made bio-pesticide formulations for all 22 crop classes.
+   - **5. Fertilizer Investment & Subsidy Calculator**: Real-time farm budget estimator with retail vs subsidized price comparisons.
 
 ---
 
-## 🤖 Machine Learning Algorithms
+## 📊 Dataset & Agronomic Standards
 
-| Algorithm | Model Type | Purpose |
-| :--- | :--- | :--- |
-| **Random Forest Classifier** | Ensemble Bagging | Primary classification engine with high non-linear feature interaction accuracy (>99%) |
-| **Gradient Boosting Classifier** | Ensemble Boosting | Sequential decision boundary optimization |
-| **Decision Tree Classifier** | Tree-based | Fast rule-based interpretability |
-| **K-Nearest Neighbors (KNN)** | Instance-based | Local soil condition proximity mapping |
-| **Gaussian Naive Bayes** | Probabilistic | Baseline likelihood estimation |
-| **Multinomial Logistic Regression** | Linear Model | Multi-class baseline benchmark |
+> **Do you need to provide or upload any datasets?**  
+> **No!** AgroAI comes completely pre-loaded with verified, authentic datasets out-of-the-box:
+> - **`Crop_Recommendation.csv` / `cropDataset.json`**: 2,200 verified agricultural data points across 22 crop classes.
+> - **`agronomyData.json`**: Full botanical, climatic, water, and fertilizer recipes for 22 crops.
+> - **`cropProfiles.json`**: Statistical means, standard deviations, and quartile benchmarks for Gaussian likelihood matching.
+> - **`Fertilizer Chemistry Database`**: Exact N-P-K percentages (Urea 46-0-0, DAP 18-46-0, MOP 0-0-60, SSP 0-16-0) and soil conditioner formulations (Agricultural Lime & Gypsum).
 
 ---
 
-## 📊 Dataset Structure (`Crop_Recommendation.csv`)
+## ⚡ Quick Start & Running the Application
 
-The dataset contains 2,200 verified agricultural data points across 22 distinct crop classes:
-- **`N`**: Ratio of Nitrogen content in soil ($\text{mg/kg}$)
-- **`P`**: Ratio of Phosphorus content in soil ($\text{mg/kg}$)
-- **`K`**: Ratio of Potassium content in soil ($\text{mg/kg}$)
-- **`temperature`**: Ambient temperature in degree Celsius (°C)
-- **`humidity`**: Relative humidity percentage (%)
-- **`ph`**: Soil pH level ($0.0 - 14.0$)
-- **`rainfall`**: Precipitation depth in millimeters ($\text{mm}$)
-- **`label`**: Target crop class (*Rice, Maize, Chickpea, Kidney Beans, Pigeonpeas, Mothbeans, Mungbean, Blackgram, Lentil, Pomegranate, Banana, Mango, Grapes, Watermelon, Muskmelon, Apple, Orange, Papaya, Coconut, Cotton, Jute, Coffee*)
+### Method 1: 1-Click Batch File (Windows)
+Double-click `run_app.bat` in the project root. It will start the Next.js server and automatically open `http://localhost:3000` in your default browser.
 
----
+### Method 2: Running via Terminal
+From the project root:
 
-## 🚀 Installation & Quick Start
+```bash
+# Install dependencies
+npm install
 
-### Method 1: Using the 1-Click Batch File (Windows)
-Double-click `setup_and_run.bat` in the project root folder. It will install all dependencies and launch the application.
-
-### Method 2: Manual Terminal Setup
-
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/<YOUR-USERNAME>/<YOUR-REPO-NAME>.git
-   cd <YOUR-REPO-NAME>
-   ```
-
-2. **Create and activate a virtual environment (optional but recommended)**:
-   ```bash
-   python -m venv venv
-   # On Windows:
-   venv\Scripts\activate
-   # On macOS/Linux:
-   source venv/bin/activate
-   ```
-
-3. **Install dependencies**:
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-4. **Launch the Streamlit Web Application**:
-   ```bash
-   streamlit run main.py
-   ```
-   Open your browser and navigate to `http://localhost:8501`.
-
----
-
-## 📁 Project Structure
-
+# Start development server
+npm run dev
 ```
-├── .streamlit/
-│   └── config.toml                  # Streamlit Light Bio-Theme configuration
-├── assets/
-│   └── system_architecture_diagram.jpg # High-resolution architecture blueprint
-├── Crop_Recommendation.csv          # 2,200-row agricultural dataset
-├── main.py                          # Core application engine & UI
-├── requirements.txt                 # Python dependencies
-├── setup_and_run.bat                # 1-click Windows runner script
-├── INSTALL_AND_RUN.txt              # Notepad setup guide
-├── .gitignore                       # Git ignore file
-└── README.md                        # Project documentation
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Production Build
+```bash
+npm run build
+npm run start
 ```
 
 ---
 
-## 📜 License
-This project is licensed under the MIT License.
+## 📂 Project Directory Structure
+
+```
+smart-crop-fertilizer-recommendation-system/
+├── agro-ai-web/                  # Next.js 16 Web Application
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── globals.css       # Tailwind CSS v4 styling & glassmorphism
+│   │   │   ├── layout.tsx        # Root application layout & metadata
+│   │   │   └── page.tsx          # Master page assembling all sections
+│   │   ├── components/
+│   │   │   ├── Navbar.tsx        # Responsive navigation & Get Started CTA
+│   │   │   ├── Hero.tsx          # Hero section with value guarantees
+│   │   │   ├── ExplainableScience.tsx # Plain-English NPK, pH & Texture guide
+│   │   │   ├── HowItWorks.tsx    # 4-step decision pipeline
+│   │   │   ├── DecisionWorkspace.tsx # 5 interactive decision modules
+│   │   │   ├── SoilGuideFaq.tsx  # Soil sampling protocol & FAQs
+│   │   │   └── Footer.tsx        # Agronomy standards & GitHub links
+│   │   ├── data/
+│   │   │   ├── agronomyData.json # 22 crops and fertilizer database
+│   │   │   ├── cropProfiles.json # Feature statistics for ML inference
+│   │   │   └── cropDataset.json  # 2,200 verified observation points
+│   │   └── lib/
+│   │       └── agronomyEngine.ts # Decision algorithms, ML scoring, FAO-56
+├── assets/                       # Architectural diagrams & media
+├── Crop_Recommendation.csv       # Original verified CSV dataset
+├── package.json                  # Root proxy configuration
+├── run_app.bat                   # 1-Click Windows execution script
+└── README.md                     # Documentation
+```
+
+---
+
+## 🛡️ License
+Released under the [MIT License](LICENSE). Built for farmers, agronomists, and researchers.
