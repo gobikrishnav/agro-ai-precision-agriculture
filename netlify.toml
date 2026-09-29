@@ -1,5 +1,4 @@
 [build]
-  base = "agro-ai-web"
   command = "npm run build"
   publish = ".next"
 

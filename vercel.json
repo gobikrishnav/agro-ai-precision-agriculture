@@ -1,5 +1,3 @@
 {
-  "buildCommand": "npm --prefix agro-ai-web run build",
-  "outputDirectory": "agro-ai-web/.next",
   "framework": "nextjs"
 }

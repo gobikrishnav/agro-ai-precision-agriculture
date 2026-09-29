@@ -1,22 +1,27 @@
 {
-  "name": "smart-crop-fertilizer-recommendation-system",
-  "version": "2.0.0",
-  "description": "Smart Crop and Fertilizer Recommendation System with Next.js",
+  "name": "agro-ai-web",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "npm --prefix agro-ai-web run dev",
-    "build": "npm --prefix agro-ai-web run build",
-    "start": "npm --prefix agro-ai-web run start",
-    "lint": "npm --prefix agro-ai-web run lint"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
   },
-  "keywords": [
-    "nextjs",
-    "agriculture",
-    "crop-recommendation",
-    "fertilizer-prescription",
-    "precision-farming",
-    "fao-56"
-  ],
-  "author": "gobikrishnav",
-  "license": "MIT"
+  "dependencies": {
+    "lucide-react": "^1.48.0",
+    "next": "16.3.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.6",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
 }
