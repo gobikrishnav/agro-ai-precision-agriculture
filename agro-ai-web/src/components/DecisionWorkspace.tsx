@@ -16,21 +16,33 @@ import {
   Info, 
   Zap,
   TrendingUp,
-  RefreshCw
+  RefreshCw,
+  Printer,
+  Bookmark,
+  MapPin,
+  Compass,
+  FileText
 } from 'lucide-react';
 import { 
   predictCrop, 
   calculateFertilizerPrescription, 
   calculateIrrigation, 
   SOIL_PRESETS, 
+  AGRO_CLIMATIC_ZONES,
   agronomyData,
   CropPredictionResult,
   FertilizerPrescriptionResult,
   IrrigationResult
 } from '../lib/agronomyEngine';
+import AdvisoryReportModal from './AdvisoryReportModal';
+import BioPesticideCalculator from './BioPesticideCalculator';
 
 export default function DecisionWorkspace() {
   const [activeTab, setActiveTab] = useState<'crop' | 'fertilizer' | 'irrigation' | 'doctor' | 'budget'>('crop');
+  const [isReportModalOpen, setIsReportModalOpen] = useState(false);
+  const [plotName, setPlotName] = useState('Plot #1 - Main Field');
+  const [selectedZone, setSelectedZone] = useState('');
+  const [savedPlots, setSavedPlots] = useState<Array<{ id: string; name: string; soilInputs: any; acres: number }>>([]);
 
   // Soil & Climate Input State
   const [soilInputs, setSoilInputs] = useState({
@@ -70,6 +82,69 @@ export default function DecisionWorkspace() {
 
   // Crop Doctor State
   const [selectedDoctorCrop, setSelectedDoctorCrop] = useState('rice');
+
+  // Load saved plots
+  React.useEffect(() => {
+    try {
+      const stored = localStorage.getItem('agroai_saved_plots');
+      if (stored) {
+        setSavedPlots(JSON.parse(stored));
+      }
+    } catch (e) {}
+  }, []);
+
+  const handleSaveCurrentPlot = () => {
+    const entered = window.prompt('Name your field plot (e.g. North Acre Paddy):', plotName);
+    if (!entered || !entered.trim()) return;
+    const name = entered.trim();
+    const newPlot = {
+      id: Date.now().toString(),
+      name,
+      soilInputs,
+      acres: fertilizerInputs.fieldAcres
+    };
+    const updated = [newPlot, ...savedPlots.filter(p => p.name !== name)];
+    setSavedPlots(updated);
+    setPlotName(name);
+    try {
+      localStorage.setItem('agroai_saved_plots', JSON.stringify(updated));
+    } catch (e) {}
+  };
+
+  const handleLoadSavedPlot = (plotId: string) => {
+    const found = savedPlots.find(p => p.id === plotId);
+    if (!found) return;
+    setPlotName(found.name);
+    setSoilInputs(found.soilInputs);
+    setFertilizerInputs(prev => ({
+      ...prev,
+      fieldAcres: found.acres,
+      n: found.soilInputs.n,
+      p: found.soilInputs.p,
+      k: found.soilInputs.k,
+      ph: found.soilInputs.ph,
+      soilTexture: found.soilInputs.soilTexture
+    }));
+    const res = predictCrop(found.soilInputs);
+    setCropResult(res);
+  };
+
+  const handleZoneSelect = (zoneId: string) => {
+    setSelectedZone(zoneId);
+    const z = AGRO_CLIMATIC_ZONES.find(item => item.id === zoneId);
+    if (!z) return;
+    const updated = {
+      ...soilInputs,
+      temperature: z.temperature,
+      humidity: z.humidity,
+      rainfall: z.rainfall,
+      soilTexture: z.typicalSoil
+    };
+    setSoilInputs(updated);
+    const res = predictCrop(updated);
+    setCropResult(res);
+  };
+
 
   // Results State
   const [cropResult, setCropResult] = useState<CropPredictionResult | null>(() => predictCrop(soilInputs));
@@ -184,6 +259,53 @@ export default function DecisionWorkspace() {
         </p>
       </div>
 
+      {/* Quick Field Plot & Advisory Action Bar */}
+      <div className="bg-white p-4 rounded-3xl border border-emerald-100 shadow-xs mb-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3 w-full md:w-auto">
+          <div className="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+            <MapPin className="w-4 h-4" />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-emerald-700 font-semibold">Active Field Plot:</span>
+              <strong className="text-xs sm:text-sm text-emerald-950 font-bold">{plotName}</strong>
+            </div>
+            <span className="text-[10px] text-emerald-700/80">Area: {fertilizerInputs.fieldAcres} Acre(s) • Soil: {soilInputs.soilTexture.split(' ')[0]}</span>
+          </div>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2 w-full md:w-auto justify-end">
+          {savedPlots.length > 0 && (
+            <select
+              onChange={e => e.target.value && handleLoadSavedPlot(e.target.value)}
+              className="px-3 py-2 rounded-xl border border-emerald-200 text-xs font-bold text-emerald-950 bg-emerald-50/30"
+              defaultValue=""
+            >
+              <option value="" disabled>Saved Plots ({savedPlots.length})</option>
+              {savedPlots.map(p => (
+                <option key={p.id} value={p.id}>{p.name} ({p.acres} Ac)</option>
+              ))}
+            </select>
+          )}
+
+          <button
+            onClick={handleSaveCurrentPlot}
+            className="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-800 text-xs font-bold border border-emerald-200 flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Bookmark className="w-3.5 h-3.5" />
+            <span>Save Plot</span>
+          </button>
+
+          <button
+            onClick={() => setIsReportModalOpen(true)}
+            className="px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white text-xs font-bold flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+          >
+            <Printer className="w-3.5 h-3.5" />
+            <span>Print Official Advisory Report (PDF)</span>
+          </button>
+        </div>
+      </div>
+
       {/* Main Tab Navigation */}
       <div className="flex items-center justify-start sm:justify-center overflow-x-auto pb-3 mb-8 gap-2 no-scrollbar">
         <button
@@ -253,6 +375,37 @@ export default function DecisionWorkspace() {
       {activeTab === 'crop' && (
         <div className="space-y-8 animate-fadeIn">
           
+          {/* Regional Agro-Climatic Zones */}
+          <div className="bg-emerald-50/60 p-5 rounded-3xl border border-emerald-200/80 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3">
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-800 flex items-center gap-1.5">
+                <Compass className="w-3.5 h-3.5 text-emerald-600" />
+                Auto-Calibrate by Regional Agro-Climatic Zone (Subtropical & Tropical)
+              </span>
+              <span className="text-[11px] text-emerald-700 font-medium">Select your regional belt to auto-fill climate & soil dynamics</span>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+              {AGRO_CLIMATIC_ZONES.map(z => (
+                <button
+                  key={z.id}
+                  onClick={() => handleZoneSelect(z.id)}
+                  className={`p-3 text-left rounded-2xl border transition-all cursor-pointer ${
+                    selectedZone === z.id
+                      ? 'bg-emerald-700 text-white border-emerald-800 shadow-xs'
+                      : 'bg-white text-emerald-950 hover:bg-emerald-100/60 border-emerald-200/80'
+                  }`}
+                >
+                  <p className="text-xs font-bold line-clamp-1">{z.name}</p>
+                  <p className={`text-[10px] line-clamp-1 mt-0.5 ${selectedZone === z.id ? 'text-emerald-100' : 'text-emerald-700'}`}>{z.region}</p>
+                  <p className={`text-[9px] mt-1 font-semibold ${selectedZone === z.id ? 'text-emerald-200' : 'text-emerald-800/80'}`}>
+                    {z.temperature}°C • {z.humidity}% RH • {z.rainfall}mm
+                  </p>
+                </button>
+              ))}
+            </div>
+          </div>
+
           {/* Quick 1-Click Presets */}
           <div className="bg-white p-5 rounded-3xl border border-emerald-100 shadow-xs">
             <div className="flex items-center justify-between mb-3">
@@ -1115,6 +1268,9 @@ export default function DecisionWorkspace() {
                     </div>
                   </div>
 
+                  {/* Organic Bio-Pesticide & Formulation Calculator */}
+                  <BioPesticideCalculator />
+
                 </div>
               );
             })()}
@@ -1222,6 +1378,17 @@ export default function DecisionWorkspace() {
 
         </div>
       )}
+
+      {/* Official Advisory Printable / PDF Modal */}
+      <AdvisoryReportModal
+        isOpen={isReportModalOpen}
+        onClose={() => setIsReportModalOpen(false)}
+        plotName={plotName}
+        soilInputs={soilInputs}
+        cropResult={cropResult}
+        fertilizerResult={fertilizerResult}
+        irrigationResult={irrigationResult}
+      />
 
     </section>
   );
