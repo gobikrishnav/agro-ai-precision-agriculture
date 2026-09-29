@@ -28,7 +28,7 @@ export default function Footer() {
             </p>
             <div className="flex items-center gap-4 pt-2">
               <a 
-                href="https://github.com/gobikrishnav/smart-crop-fertilizer-recommendation-system" 
+                href="https://github.com/gobikrishnav/agro-ai-precision-agriculture" 
                 target="_blank" 
                 rel="noreferrer"
                 className="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-lg bg-emerald-900/60 hover:bg-emerald-900 text-emerald-200 border border-emerald-800 transition-colors"
